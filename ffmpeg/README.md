@@ -19,4 +19,5 @@ http://blog.yikuyiku.com/?p=4533
 ####(3)在源码下执行./mkconfig.sh(根据需要可以将.sh文件的权限赋成755)
 ####(4) mkconfig.sh中的$PREFIX变量指定了编译文件的生成路径，若编译成功，则相关so库会在该路径中生成。
 
+ndk build命令 ndk-build APP_ABI=armeabi-v7a
 
