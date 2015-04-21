@@ -15,6 +15,7 @@ $RECYCLE.BIN/
 *.msp
 /bin
 /gen
+/out
 # =========================
 # Operating System Files
 # =========================

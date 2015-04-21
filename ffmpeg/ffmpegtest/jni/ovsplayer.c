@@ -7,7 +7,7 @@
 #include "libavformat/avformat.h"
 
 
-JNIEXPORT jstring JNICALL Java_com_example_chengang_myapplication_MainActivity_getStringFromNative
+JNIEXPORT jstring JNICALL Java_com_example_ffmpegtest_MyActivity_getStringFromNative
   (JNIEnv * env , jobject obj)
   {
         const char *url = "/mnt/sdcard/1.mp4";
