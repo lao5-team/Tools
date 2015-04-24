@@ -24,7 +24,7 @@ http://blog.yikuyiku.com/?p=4533
 ####(1)新建一个普通的android应用工程
 ####(2)在工程根目录下新建一个jni的目录，然后在里面新建一个prebuilt的目录。把编译ffmpeg库生成的头文件拷贝到jni目录下，把so库拷贝到prebuilt目录下。
 ####(3)在jni目录下，创建Android.mk文件，文件内容见代码。
-####(4)在jni目录下，（如果你已经将ndk目录添加到环境变量中），在控制台输入ndk build命令： ndk-build APP_ABI=armeabi-v7a 进行编译。编译成功，会在整个工程目录下生成一个libs的目录，并将编译出来的so库拷贝过去。
+####(4)在jni目录下，（如果你已经将ndk目录添加到环境变量中），在控制台输入ndk build命令： ndk-build APP_ABI=armeabi-v7a NDK_DEBUG=1 进行编译。编译成功，会在整个工程目录下生成一个libs的目录，并将编译出来的so库拷贝过去。
 ####(5)在的Java代码中加载这些库。注意加载so库的顺序是有依赖的，不能错。
 	    static {
         System.loadLibrary("avutil-54");
