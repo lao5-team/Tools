@@ -17,8 +17,19 @@ http://blog.yikuyiku.com/?p=4533
 ####(1)将mkconfig.sh拷贝到ffmpeg源码处
 ####(2)修改里面关于ndk的路径
 ####(3)在源码下执行./mkconfig.sh(根据需要可以将.sh文件的权限赋成755)
-####(4)mkconfig.sh中的$PREFIX变量指定了编译文件的生成路径，若编译成功，则相关so库会在该路径中生成。该例子中，这些so库会在ffmpeg/android这个目录中生成。还有so库相关的.h头文件也会在这里边生成。
-####(5)本例中生成的so库包括libavcodec-56.so,libavfilter-5.so,libavformat-56.so,libavutil-54.so,libswresample-1.so,libswscale-3.so
+####(4)在ffmpeg目录下把configure文件中的这几行，目的是去掉默认生成的库名字libavcodec.so.55最后那个”55″的版本号。
+
+    SLIBNAME_WITH_MAJOR='$(SLIBNAME).$(LIBMAJOR)'
+    LIB_INSTALL_EXTRA_CMD='$$(RANLIB) "$(LIBDIR)/$(LIBNAME)"'
+    SLIB_INSTALL_NAME='$(SLIBNAME_WITH_VERSION)'
+    SLIB_INSTALL_LINKS='$(SLIBNAME_WITH_MAJOR) $(SLIBNAME)'
+
+    SLIBNAME_WITH_MAJOR='$(SLIBPREF)$(FULLNAME)-$(LIBMAJOR)$(SLIBSUF)'
+    LIB_INSTALL_EXTRA_CMD='$$(RANLIB) "$(LIBDIR)/$(LIBNAME)"'
+    SLIB_INSTALL_NAME='$(SLIBNAME_WITH_MAJOR)'
+    SLIB_INSTALL_LINKS='$(SLIBNAME)'　
+####(5)mkconfig.sh中的$PREFIX变量指定了编译文件的生成路径，若编译成功，则相关so库会在该路径中生成。该例子中，这些so库会在ffmpeg/android这个目录中生成。还有so库相关的.h头文件也会在这里边生成。
+####(6)本例中生成的so库包括libavcodec-56.so,libavfilter-5.so,libavformat-56.so,libavutil-54.so,libswresample-1.so,libswscale-3.so
 
 ##4 在android 应用中调用ffmpeg的so库
 ####(1)新建一个普通的android应用工程
