@@ -16,12 +16,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 public class OCRActivity extends Activity implements OnClickListener {
 	private TessOCR mTessOCR;
@@ -32,6 +37,27 @@ public class OCRActivity extends Activity implements OnClickListener {
 	private String mCurrentPhotoPath;
 	private static final int REQUEST_TAKE_PHOTO = 1;
 	private static final int REQUEST_PICK_PHOTO = 2;
+	private EditText mEtxThreshold;
+	private Button mBtnInvalidate;
+	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+		@Override
+		public void onManagerConnected(int status) {
+			switch (status) {
+				case LoaderCallbackInterface.SUCCESS:
+				{
+					//Log.i(TAG, "OpenCV loaded successfully");
+					//System.loadLibrary("native_activity");
+//					Intent intent = new Intent(OCRActivity.this, android.app.NativeActivity.class);
+//					OCRActivity.this.startActivity(intent);
+//					OCRActivity.this.finish();
+				} break;
+				default:
+				{
+					super.onManagerConnected(status);
+				} break;
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +70,16 @@ public class OCRActivity extends Activity implements OnClickListener {
 		mButtonGallery.setOnClickListener(this);
 		mButtonCamera = (Button) findViewById(R.id.bt_camera);
 		mButtonCamera.setOnClickListener(this);
-		mTessOCR = new TessOCR();
+		mTessOCR = new TessOCR(this ,(ImageView) findViewById(R.id.imageView_gray), (ImageView) findViewById(R.id.imageView_bin));
+		mEtxThreshold = (EditText)findViewById(R.id.editText_threshold);
+		mBtnInvalidate = (Button)findViewById(R.id.button_invalidate);
+		mBtnInvalidate.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int value = Integer.valueOf(mEtxThreshold.getEditableText().toString());
+				mTessOCR.changeParam(value);
+			}
+		});
 	}
 
 	private void uriOCR(Uri uri) {
@@ -81,6 +116,14 @@ public class OCRActivity extends Activity implements OnClickListener {
 			Uri uri = (Uri) intent
 					.getParcelableExtra(Intent.EXTRA_STREAM);
 			uriOCR(uri);
+		}
+
+		if (!OpenCVLoader.initDebug()) {
+			//Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+			OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
+		} else {
+			//Log.d(TAG, "OpenCV library found inside package. Using it!");
+			mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 		}
 	}
 

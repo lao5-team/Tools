@@ -2,7 +2,7 @@
 
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/yihao/Downloads/OpenCV-android-sdk_2/sdk/java/src/org/opencv/engine3/OpenCVEngineInterface.aidl
+ * Original file: /Users/yihao/Desktop/Workspace/Git_workspace/Tools/OpenCV-android-sdk/sdk/java/src/org/opencv/engine3/OpenCVEngineInterface.aidl
  */
 package org.opencv.engine3;
 /**
