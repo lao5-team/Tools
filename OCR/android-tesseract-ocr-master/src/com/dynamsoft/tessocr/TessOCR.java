@@ -36,7 +36,7 @@ public class TessOCR {
 	Bitmap grayBitmap;
 	Bitmap binBitmap;
 	Bitmap srcBitmap;
-	int threshhold = 128;
+	int threshhold = 14388608;
 	public String getOCRResult(Bitmap bitmap) {
 		srcBitmap = bitmap;
 		Mat rgbMat = new Mat();
@@ -45,13 +45,13 @@ public class TessOCR {
 		Mat filterMat = new Mat();
 
 		Imgproc.cvtColor(rgbMat, grayMat, Imgproc.COLOR_RGB2GRAY);//rgbMat to gray grayMat
-		Imgproc.GaussianBlur(grayMat, filterMat, new Size(9,9), 2);
+		//Imgproc.GaussianBlur(grayMat, filterMat, new Size(9,9), 2);
 		//Imgproc.f
 		 grayBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
 		 binBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-		Utils.matToBitmap(filterMat, grayBitmap); //convert mat to bitmap
+		Utils.matToBitmap(grayMat, grayBitmap); //convert mat to bitmap
 		Mat binMat = new Mat();
-		Imgproc.threshold(filterMat, binMat, threshhold, 255, Imgproc.THRESH_BINARY);
+		Imgproc.threshold(grayMat, binMat, threshhold, 255, Imgproc.THRESH_BINARY);
 		Utils.matToBitmap(binMat, binBitmap);
 		mTess.setImage(binBitmap);
 		mActivity.runOnUiThread(new Runnable() {
