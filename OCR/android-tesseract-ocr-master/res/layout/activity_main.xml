@@ -16,23 +16,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Gallery"
-                    ></Button>
+                    android:visibility="gone"></Button>
 
             <Button
                     android:id="@+id/bt_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/bt_gallery"
-                    android:text="Camera"
+                    android:text="扫描发票号码和代码"
                     />
 
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText_code" android:layout_below="@+id/bt_camera" android:hint="发票代码"
+                    android:layout_toLeftOf="@+id/editText_threshold"/>
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText_number" android:layout_below="@+id/editText_code" android:hint="发票号码"/>
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText_password" android:hint="发票密码"
+                    android:layout_below="@+id/editText_number"/>
             <TextView
                     android:id = "@+id/tv_result"
                     android:layout_width="fill_parent"
                     android:layout_height="100dp"
-                    android:layout_below="@id/bt_gallery"
+                    android:layout_below="@+id/editText_password"
                     android:textIsSelectable="true"
-                    android:scrollbars="vertical"/>
+                    android:scrollbars="vertical" android:visibility="gone"/>
 
             <SurfaceView
                     android:layout_width="480px"
@@ -67,13 +81,13 @@
             <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText_threshold" android:layout_alignParentTop="true"
-                    android:text="14388608" android:singleLine="true" android:layout_toRightOf="@+id/bt_camera"
-                    android:layout_marginLeft="10dp"/>
+                    android:id="@+id/editText_threshold" android:layout_alignParentTop="false"
+                    android:text="100" android:singleLine="true" android:layout_toRightOf="@+id/bt_camera"
+                    android:layout_marginLeft="10dp" android:layout_below="@+id/bt_camera"/>
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="invalidate"
+                    android:text="扫描密码"
                     android:id="@+id/button_invalidate" android:layout_alignParentTop="true" android:layout_alignRight="@+id/imageView_bin"
                     android:layout_alignEnd="@+id/imageView_bin"/>
         </RelativeLayout>

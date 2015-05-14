@@ -27,8 +27,10 @@ public class DrawImageView extends ImageView{
 		// TODO Auto-generated method stub
 		super.onDraw(canvas);
 		//240 * 80
-		canvas.drawRect(new Rect(120, 280, 360, 360), paint);//绘制矩形
-		
+		//canvas.drawRect(new Rect(120, 280, 360, 360), paint);//绘制矩形
+
+		//140*40
+		canvas.drawRect(new Rect(170, 300, 310, 340), paint);
 	}
 
 

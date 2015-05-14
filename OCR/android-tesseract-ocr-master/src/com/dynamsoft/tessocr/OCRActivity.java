@@ -43,7 +43,8 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 	private Camera myCamera = null;
 	private Bitmap mBitmap = null;
 	private Camera.AutoFocusCallback myAutoFocusCallback = null;
-
+	private EditText mEtxCode = null;
+	private EditText mEtxNumber = null;
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
 		public void onManagerConnected(int status) {
@@ -75,6 +76,8 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 		mButtonGallery.setOnClickListener(this);
 		mButtonCamera = (Button) findViewById(R.id.bt_camera);
 		mButtonCamera.setOnClickListener(this);
+		mEtxCode = (EditText)findViewById(R.id.editText_code);
+		mEtxNumber = (EditText)findViewById(R.id.editText_number);
 		mTessOCR = new TessOCR(this ,(ImageView) findViewById(R.id.imageView_gray), (ImageView) findViewById(R.id.imageView_bin));
 		mEtxThreshold = (EditText)findViewById(R.id.editText_threshold);
 		mBtnInvalidate = (Button)findViewById(R.id.button_invalidate);
@@ -293,8 +296,8 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 			pickPhoto();
 			break;
 		case R.id.bt_camera:
-			//takePhoto();
-			//doOCR(getCaptureBitmap());
+			int value = Integer.valueOf(mEtxThreshold.getEditableText().toString());
+			mTessOCR.changeParam(value);
 			mIsCapture = true;
 			break;
 		}
@@ -329,7 +332,10 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 					public void run() {
 						// TODO Auto-generated method stub
 						if (result != null && !result.equals("")) {
-							mResult.setText(result);
+							mEtxCode.setText(result);
+//							String [] temps = result.split("\n");
+//							mEtxCode.setText(temps[0]);
+//							mEtxNumber.setText(temps[1]);
 						}
 
 						mProgressDialog.dismiss();
@@ -540,7 +546,7 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 				m.setRotate(90, (float) bmp.getWidth() / 2, (float) bmp.getHeight() / 2);
 
 				try {
-					Bitmap bmp1 = Bitmap.createBitmap(bmp, 280, 120, 80, 240, m, true);
+					Bitmap bmp1 = Bitmap.createBitmap(bmp, 300, 170, 40, 140, m, true);
 					mImage.setImageBitmap(bmp1);
 					doOCR(bmp1);
 				} catch (OutOfMemoryError ex) {

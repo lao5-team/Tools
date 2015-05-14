@@ -8,10 +8,8 @@ import android.os.Environment;
 
 import android.widget.ImageView;
 import com.googlecode.tesseract.android.TessBaseAPI;
-import org.apache.http.client.methods.HttpPost;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 public class TessOCR {
@@ -19,6 +17,7 @@ public class TessOCR {
 	private ImageView mIvGray;
 	private ImageView mIvBin;
 	private Activity mActivity;
+	int mThreshhold = 128;
 	public TessOCR(Activity context, ImageView ivGray, ImageView ivBin) {
 		// TODO Auto-generated constructor stub
 		mTess = new TessBaseAPI();
@@ -36,7 +35,7 @@ public class TessOCR {
 	Bitmap grayBitmap;
 	Bitmap binBitmap;
 	Bitmap srcBitmap;
-	int threshhold = 14388608;
+
 	public String getOCRResult(Bitmap bitmap) {
 		srcBitmap = bitmap;
 		Mat rgbMat = new Mat();
@@ -51,7 +50,7 @@ public class TessOCR {
 		 binBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
 		Utils.matToBitmap(grayMat, grayBitmap); //convert mat to bitmap
 		Mat binMat = new Mat();
-		Imgproc.threshold(grayMat, binMat, threshhold, 255, Imgproc.THRESH_BINARY);
+		Imgproc.threshold(grayMat, binMat, mThreshhold, 255, Imgproc.THRESH_BINARY);
 		Utils.matToBitmap(binMat, binBitmap);
 		mTess.setImage(binBitmap);
 		mActivity.runOnUiThread(new Runnable() {
@@ -75,8 +74,8 @@ public class TessOCR {
 	}
 
 	public void changeParam(int threshhold){
-		this.threshhold = threshhold;
-		getOCRResult(srcBitmap);
+		this.mThreshhold = threshhold;
+		//getOCRResult(srcBitmap);
 	}
 	
 }
