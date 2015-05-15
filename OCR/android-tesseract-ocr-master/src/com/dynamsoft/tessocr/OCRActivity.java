@@ -18,9 +18,7 @@ import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
+import org.opencv.android.*;
 
 public class OCRActivity extends Activity implements OnClickListener, SurfaceHolder.Callback, Camera.PreviewCallback {
 	private TessOCR mTessOCR;
@@ -34,7 +32,7 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 	private EditText mEtxThreshold;
 	private Button mBtnInvalidate;
 
-	private static final String tag="tessocr";
+	public static final String tag="tessocr";
 	private boolean isPreview = false;
 	private SurfaceView mPreviewSV = null; //预览SurfaceView
 	private DrawImageView mDrawIV = null;
@@ -51,11 +49,24 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 			switch (status) {
 				case LoaderCallbackInterface.SUCCESS:
 				{
-					//Log.i(TAG, "OpenCV loaded successfully");
-					//System.loadLibrary("native_activity");
-//					Intent intent = new Intent(OCRActivity.this, android.app.NativeActivity.class);
-//					OCRActivity.this.startActivity(intent);
-//					OCRActivity.this.finish();
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						//Bitmap checkcodeBmp = BitmapFactory.decodeStream(getResources().getAssets().open("2.jpeg"));
+						//doOCR(processCheckcodeBmp(checkcodeBmp, 2));
+						Thread t = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									Utils.checkReceipt("111001481005", "64274411", "asdf", mTessOCR);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						t.start();
 				} break;
 				default:
 				{
@@ -126,14 +137,8 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 		mDrawIV = (DrawImageView)findViewById(R.id.drawIV);
 		mDrawIV.draw(new Canvas());
 
-//		mPhotoImgBtn = (ImageButton)findViewById(R.id.photoImgBtn);
-//		//手动设置拍照ImageButton的大小为120×120,原图片大小是64×64
-//		ViewGroup.LayoutParams lp = mPhotoImgBtn.getLayoutParams();
-//		lp.width = 120;
-//		lp.height = 120;
-//		mPhotoImgBtn.setLayoutParams(lp);
-//		mPhotoImgBtn.setOnClickListener(new PhotoOnClickListener());
-//		mPhotoImgBtn.setOnTouchListener(new MyOnTouchListener());
+
+
 	}
 
 	private void uriOCR(Uri uri) {
@@ -652,5 +657,9 @@ public class OCRActivity extends Activity implements OnClickListener, SurfaceHol
 		canvas.drawBitmap(bmpResult, new Rect(120, 280, 360, 360), new Rect(0, 0, 240, 80), null);
 		mySurfaceHolder.unlockCanvasAndPost(canvas);
 		return bmpResult;
+	}
+
+	public static Bitmap processCheckcodeBmp(Bitmap bmp, int width){
+		return Bitmap.createBitmap(bmp, width, width, bmp.getWidth()-width*2, bmp.getHeight() - width*2);
 	}
 }
